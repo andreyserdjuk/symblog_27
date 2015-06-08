@@ -41,10 +41,10 @@ class CommentController extends Controller
 
             return $this->redirect(
                 $this->generateUrl(
-                    'blogger_blog_show', array(
+                    'blogger_blog_show', [
                         'id' => $comment->getBlog()->getId(),
                         'slug' => $comment->getBlog()->getSlug() . '#comment' . $comment->getId()
-                    )
+                    ]
                 )
                 .'#comment-' . $comment->getId()
             );
