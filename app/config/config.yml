@@ -41,7 +41,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles:        [BloggerBlogBundle]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -50,6 +50,9 @@ assetic:
         #yui_css:
         #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
 #    read_from: "%kernel.root_dir%/web/assets/"
+        yui_css:
+            jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.8.jar
+
 
 # Doctrine Configuration
 doctrine:

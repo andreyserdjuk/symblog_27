@@ -9,6 +9,12 @@ class BloggerBlogExtension extends \Twig_Extension
         return ['created_ago' => new \Twig_Filter_Method($this, 'createdAgo')];
     }
 
+    /**
+     * @param \DateTime $dateTime
+     * @throws \InvalidArgumentException
+     *
+     * @return string
+     */
     public function createdAgo(\DateTime $dateTime)
     {
         $delta = time() - $dateTime->getTimestamp();
@@ -20,9 +26,9 @@ class BloggerBlogExtension extends \Twig_Extension
         {
             // Seconds
             $time = $delta;
-            $duration = $time . " second" . (($time > 1) ? "s" : "") . " ago";
+            $duration = $time . " second" . (($time ===0 || $time > 1) ? "s" : "") . " ago";
         }
-        else if ($delta <= 3600)
+        else if ($delta < 3600)
         {
             // Mins
             $time = floor($delta / 60);
