@@ -1,7 +1,13 @@
 security:
     providers:
-        in_memory:
-            memory: ~
+        our_db_provider:
+            entity:
+                class: AppBundle\Entity\User
+
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
 
     firewalls:
         dev:
@@ -10,3 +16,13 @@ security:
 
         default:
             anonymous: ~
+            pattern: ^/
+            http_basic: ~
+            provider: our_db_provider
+            form_login:
+                login_path: /login
+                check_path: /login_check
+
+    access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/contact, roles: ROLE_USER }
