@@ -1,5 +1,4 @@
 <?php
-
 namespace Blogger\BlogBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

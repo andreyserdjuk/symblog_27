@@ -1,8 +1,7 @@
 <?php
-// src/Blogger/BlogBundle/Controller/BlogController.php
-
 namespace Blogger\BlogBundle\Controller;
 
+use Blogger\BlogBundle\Entity\Blog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
@@ -10,17 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class BlogController extends Controller
 {
-    public function showAction($id, $slug, $comments)
+    public function showAction(Blog $blog, $slug, $comments)
     {
-        $em = $this->getDoctrine()->getManager();
-        $blog = $em->getRepository('BloggerBlogBundle:Blog')->find($id);
-
-        if (!$blog) {
-            throw $this->createNotFoundException('Unable to find Blog post.');
-        }
-
-        $comments = $em->getRepository('BloggerBlogBundle:Comment')->getCommentsForBlog($blog->getId());
-
-        return $this->render('BloggerBlogBundle:Blog:show.html.twig', ['blog' => $blog, 'comments' => $comments]);
+        return $this->render(
+            'BloggerBlogBundle:Blog:show.html.twig',
+            [
+                'blog' => $blog,
+                'comments' => $blog->getComments()
+            ]
+        );
     }
 }

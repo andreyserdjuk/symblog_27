@@ -4,6 +4,7 @@ namespace Blogger\BlogBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CommentType extends AbstractType
@@ -17,17 +18,13 @@ class CommentType extends AbstractType
         $builder
             ->add('user')
             ->add('comment')
-//            ->add('approved')
-//            ->add('created')
-//            ->add('updated')
-//            ->add('blog')
         ;
     }
     
     /**
      * @param OptionsResolverInterface $resolver
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Blogger\BlogBundle\Entity\Comment'
