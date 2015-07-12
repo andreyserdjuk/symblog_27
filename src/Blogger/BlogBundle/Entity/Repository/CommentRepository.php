@@ -41,4 +41,14 @@ class CommentRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getSimilarByComment($value)
+    {
+        return $this
+            ->createQueryBuilder('c')
+            ->where('c.comment LIKE :comment')
+            ->setParameter('comment', '%' . $value . '%')
+            ->getQuery()
+            ->getResult();
+    }
 }
