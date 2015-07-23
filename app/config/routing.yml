@@ -8,3 +8,6 @@ blogger_blog:
 
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
+
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"

@@ -17,17 +17,19 @@ class BlogRepository extends EntityRepository
             ->getResult();
     }
 
-    public function getLatestBlogs($limit = null)
+    /**
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getLatestBlogs($limit = 10)
     {
-        $qb = $this->createQueryBuilder('b')
+        return $this->createQueryBuilder('b')
             ->select('b', 'c')
             ->leftJoin('b.comments', 'c')
-            ->addOrderBy('b.created', 'DESC');
-
-        if (!is_null($limit))
-            $qb->setMaxResults($limit);
-
-        return $qb->getQuery()
+            ->addOrderBy('b.created', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
             ->getResult();
     }
 

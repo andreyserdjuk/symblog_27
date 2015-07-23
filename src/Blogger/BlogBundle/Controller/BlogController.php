@@ -9,13 +9,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  */
 class BlogController extends Controller
 {
+    /**
+     * @param Blog $blog
+     * @param      $slug
+     * @param      $comments
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function showAction(Blog $blog, $slug, $comments)
     {
         return $this->render(
             'BloggerBlogBundle:Blog:show.html.twig',
             [
-                'blog' => $blog,
-                'comments' => $blog->getComments()
+                'blog'     => $blog,
+                'comments' => $blog->getComments(),
             ]
         );
     }

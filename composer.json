@@ -23,7 +23,8 @@
         "doctrine/doctrine-fixtures-bundle": "^2.2",
         "doctrine/migrations": "1.0.*@dev",
         "doctrine/doctrine-migrations-bundle": "2.1.*@dev",
-        "absolvent/phpunit-symfony": "dev-master"
+        "absolvent/phpunit-symfony": "dev-master",
+        "friendsofsymfony/user-bundle": "2.0.x-dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

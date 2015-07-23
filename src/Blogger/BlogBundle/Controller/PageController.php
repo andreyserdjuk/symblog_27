@@ -8,19 +8,32 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PageController extends Controller
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction()
     {
-        $repository = $this->getDoctrine()->getRepository('BloggerBlogBundle:Blog');
+        $repository = $this->getDoctrine()->getRepository(
+            'BloggerBlogBundle:Blog'
+        );
         $blogs = $repository->getLatestBlogs();
 
-        return $this->render("@BloggerBlog/Page/index.html.twig", ['blogs' => $blogs]);
+        return $this->render(
+            "@BloggerBlog/Page/index.html.twig", ['blogs' => $blogs]
+        );
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function aboutAction()
     {
         return $this->render("@BloggerBlog/about.html.twig");
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function contactAction()
     {
         $enquiry = new Enquiry();
@@ -34,28 +47,51 @@ class PageController extends Controller
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Contact enquiry from symblog')
                     ->setFrom('enquiries@symblog.co.uk')
-                    ->setTo($this->container->getParameter('blogger_blog.emails.contact_email'))
+                    ->setTo(
+                        $this->container->getParameter(
+                            'blogger_blog.emails.contact_email'
+                        )
+                    )
                     ->setBody(
-                        $this->renderView('BloggerBlogBundle:Page:contactEmail.txt.twig', array('enquiry' => $enquiry)));
+                        $this->renderView(
+                            'BloggerBlogBundle:Page:contactEmail.txt.twig',
+                            array('enquiry' => $enquiry)
+                        )
+                    );
 
                 $this->get('mailer')->send($message);
 
-                $this->addFlash('blogger-notice', 'Your contact enquiry was successfully sent. Thank you!');
+                $this->addFlash(
+                    'blogger-notice',
+                    'Your contact enquiry was successfully sent. Thank you!'
+                );
 
-                return $this->redirect($this->generateUrl('blogger_blog_contact'));
+                return $this->redirect(
+                    $this->generateUrl('blogger_blog_contact')
+                );
             }
         }
 
-        return $this->render("@BloggerBlog/Page/contact.html.twig", ['form' => $form->createView()]);
+        return $this->render(
+            "@BloggerBlog/Page/contact.html.twig",
+            ['form' => $form->createView()]
+        );
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function sidebarAction()
     {
-        $blogRepo = $this->getDoctrine()->getRepository('BloggerBlogBundle:Blog');
+        $blogRepo = $this->getDoctrine()->getRepository(
+            'BloggerBlogBundle:Blog'
+        );
         $tags = $blogRepo->getTags();
         $tagWeights = $blogRepo->getTagWeights($tags);
 
-        $commentLimit = $this->container->getParameter('blogger_blog.comments.latest_comment_limit');
+        $commentLimit = $this->container->getParameter(
+            'blogger_blog.comments.latest_comment_limit'
+        );
 
         $latestComments = $this->getDoctrine()
             ->getRepository('BloggerBlogBundle:Comment')

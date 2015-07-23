@@ -9,26 +9,38 @@ use Blogger\BlogBundle\Form\CommentType;
 
 class CommentController extends Controller
 {
+    /**
+     * @param Blog $blog
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function newAction(Blog $blog)
     {
         $comment = new Comment();
         $comment->setBlog($blog);
         $form = $this->createForm(new CommentType(), $comment);
 
-        return $this->render('BloggerBlogBundle:Comment:form.html.twig', array(
+        return $this->render(
+            'BloggerBlogBundle:Comment:form.html.twig', array(
             'comment' => $comment,
-            'form'   => $form->createView()
-        ));
+            'form'    => $form->createView(),
+        )
+        );
     }
 
+    /**
+     * @param Blog $blog
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function createAction(Blog $blog)
     {
-        $comment  = new Comment();
+        $comment = new Comment();
         $comment->setBlog($blog);
 
         $request = $this->container->get('request');
 
-        $form    = $this->createForm(new CommentType(), $comment);
+        $form = $this->createForm(new CommentType(), $comment);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -40,11 +52,12 @@ class CommentController extends Controller
                 $this->generateUrl(
                     'blogger_blog_show',
                     [
-                        'id' => $comment->getBlog()->getId(),
-                        'slug' => $comment->getBlog()->getSlug() . '#comment' . $comment->getId()
+                        'id'   => $comment->getBlog()->getId(),
+                        'slug' => $comment->getBlog()->getSlug().'#comment'
+                            .$comment->getId(),
                     ]
                 )
-                .'#comment-' . $comment->getId()
+                .'#comment-'.$comment->getId()
             );
         }
 
@@ -52,7 +65,7 @@ class CommentController extends Controller
             'BloggerBlogBundle:Comment:create.html.twig',
             [
                 'comment' => $comment,
-                'form'    => $form->createView()
+                'form'    => $form->createView(),
             ]
         );
     }
