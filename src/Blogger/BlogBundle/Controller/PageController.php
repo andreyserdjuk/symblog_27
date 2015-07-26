@@ -3,17 +3,24 @@ namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Enquiry;
 use Blogger\BlogBundle\Form\EnquiryType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
 class PageController extends Controller
 {
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template()
+     */
     public function indexAction()
     {
         $repository = $this->getDoctrine()->getRepository('BloggerBlogBundle:Blog');
-        $blogs = $repository->getLatestBlogs();
+        $posts = $repository->getLatestPosts();
 
-        return $this->render("@BloggerBlog/Page/index.html.twig", ['blogs' => $blogs]);
+        return [
+            'posts' => $posts,
+        ];
     }
 
     public function aboutAction()
@@ -27,6 +34,7 @@ class PageController extends Controller
         $form = $this->createForm(new EnquiryType(), $enquiry);
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
+
         if ($request->getMethod() == Request::METHOD_POST) {
 
             $form->handleRequest($request);

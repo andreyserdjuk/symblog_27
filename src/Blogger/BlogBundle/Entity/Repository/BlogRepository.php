@@ -17,7 +17,12 @@ class BlogRepository extends EntityRepository
             ->getResult();
     }
 
-    public function getLatestBlogs($limit = null)
+    /**
+     * @param int $limit
+     *
+     * @return array
+     */
+    public function getLatestPosts($limit = 10)
     {
         $qb = $this->createQueryBuilder('b')
             ->select('b', 'c')
