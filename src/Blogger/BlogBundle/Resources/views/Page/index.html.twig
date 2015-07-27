@@ -2,7 +2,7 @@
 {% extends 'BloggerBlogBundle::layout.html.twig' %}
 
 {% block body %}
-    {% for blog in posts %}
+    {% for post in posts %}
         <article class="blog">
             <div class="date"><time datetime="{{ post.created|date('c') }}">{{ post.created|date('l, F j, Y') }}</time></div>
             <header>

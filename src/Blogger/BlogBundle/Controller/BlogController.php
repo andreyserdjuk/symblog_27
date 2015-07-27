@@ -15,13 +15,9 @@ class BlogController extends Controller
      * @Route(
      *      path="/{id}/{slug}/{comments}",
      *      name="blogger_blog_show",
-     *      requirements={"id"="\d+"},
-     *      defaults={ _controller: "BloggerBlogBundle:Blog:show", comments: true }
+     *      requirements={"id"="\d+", "comments"="true"},
+     *      defaults={"comments"="true"}
      * )
-     *
-     * @param Blog $blog
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
      * @Template()
      */
     public function showAction(Blog $blog)

@@ -3,14 +3,19 @@ namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Enquiry;
 use Blogger\BlogBundle\Form\EnquiryType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends Controller
 {
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route(
+     *      path="/",
+     *      name="blogger_blog_homepage"
+     * )
      * @Template()
      */
     public function indexAction()
@@ -18,16 +23,29 @@ class PageController extends Controller
         $repository = $this->getDoctrine()->getRepository('BloggerBlogBundle:Blog');
         $posts = $repository->getLatestPosts();
 
-        return [
-            'posts' => $posts,
-        ];
+        return ['posts' => $posts];
     }
 
+    /**
+     * @Route(
+     *      path="/about",
+     *      name="blogger_blog_about"
+     * )
+     * @Template("@BloggerBlog/about.html.twig")
+     */
     public function aboutAction()
     {
-        return $this->render("@BloggerBlog/about.html.twig");
+        return [];
     }
 
+    /**
+     * @Route(
+     *      path="/contact",
+     *      name="blogger_blog_contact"
+     * )
+     * @Method({"GET", "POST"})
+     * @Template()
+     */
     public function contactAction()
     {
         $enquiry = new Enquiry();
@@ -44,7 +62,11 @@ class PageController extends Controller
                     ->setFrom('enquiries@symblog.co.uk')
                     ->setTo($this->container->getParameter('blogger_blog.emails.contact_email'))
                     ->setBody(
-                        $this->renderView('BloggerBlogBundle:Page:contactEmail.txt.twig', array('enquiry' => $enquiry)));
+                        $this->renderView(
+                            'BloggerBlogBundle:Page:contactEmail.txt.twig',
+                            array('enquiry' => $enquiry)
+                        )
+                    );
 
                 $this->get('mailer')->send($message);
 
@@ -54,7 +76,7 @@ class PageController extends Controller
             }
         }
 
-        return $this->render("@BloggerBlog/Page/contact.html.twig", ['form' => $form->createView()]);
+        return ['form' => $form->createView()];
     }
 
     public function sidebarAction()

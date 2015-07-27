@@ -1,10 +1,11 @@
 blogger_blog:
-    resource: "@BloggerBlogBundle/Resources/config/routing.yml"
-    prefix:   /
+    resource: @BloggerBlogBundle/Controller/
+    type: annotation
+    defaults: { _controller: BloggerBlogBundle:Page:index, commets: "true" }
 
 #app:
 #    resource: "@AppBundle/Controller/"
 #    type:     annotation
 
-app:
-    resource: "@AppBundle/Resources/config/routing.yml"
+#app:
+#    resource: "@AppBundle/Resources/config/routing.yml"
