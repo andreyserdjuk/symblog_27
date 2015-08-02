@@ -30,18 +30,12 @@ class CommentController extends Controller
     }
 
     /**
-<<<<<<< HEAD
-     * @param Blog $blog
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-=======
      * @Route(
      *      path="/comment/{blog_id}",
      *      name="blogger_blog_comment_create",
      *      requirements={"blog_id"="\d+"}
      * )
      * @Method({"POST"})
->>>>>>> develop
      */
     public function createAction(Blog $blog)
     {
