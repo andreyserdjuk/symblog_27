@@ -13,17 +13,16 @@ class BlogController extends Controller
 {
     /**
      * @Route(
-     *      path="/{id}/{slug}/{comments}",
+     *      path="/{id}/{slug}",
      *      name="blogger_blog_show",
-     *      requirements={"id"="\d+", "comments"="true"},
-     *      defaults={"comments"="true"}
+     *      requirements={"id"="\d+"}
      * )
-     * @Template()
+     * @Template
      */
     public function showAction(Blog $blog)
     {
         return [
-            'blog'     => $blog,
+            'post'     => $blog,
             'comments' => $blog->getComments(),
         ];
     }
