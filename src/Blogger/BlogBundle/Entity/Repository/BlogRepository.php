@@ -22,7 +22,7 @@ class BlogRepository extends EntityRepository
      *
      * @return array
      */
-    public function getLatestBlogs($limit = 10)
+    public function getLatestPosts($limit = 10)
     {
         return $this->createQueryBuilder('b')
             ->select('b', 'c')
@@ -42,13 +42,11 @@ class BlogRepository extends EntityRepository
             ->getResult();
 
         $tags = array();
-        foreach ($blogTags as $blogTag)
-        {
+        foreach ($blogTags as $blogTag) {
             $tags = array_merge(explode(",", $blogTag['tags']), $tags);
         }
 
-        foreach ($tags as &$tag)
-        {
+        foreach ($tags as &$tag) {
             $tag = trim($tag);
         }
 
@@ -58,15 +56,15 @@ class BlogRepository extends EntityRepository
     public function getTagWeights($tags)
     {
         $tagWeights = array();
-        if (empty($tags))
+        if (empty($tags)) {
             return $tagWeights;
+        }
 
-        foreach ($tags as $tag)
-        {
+        foreach ($tags as $tag) {
             $tagWeights[$tag] = (isset($tagWeights[$tag])) ? $tagWeights[$tag] + 1 : 1;
         }
         // Shuffle the tags
-        uksort($tagWeights, function() {
+        uksort($tagWeights, function () {
             return rand() > rand();
         });
 
@@ -74,8 +72,7 @@ class BlogRepository extends EntityRepository
 
         // Max of 5 weights
         $multiplier = ($max > 5) ? 5 / $max : 1;
-        foreach ($tagWeights as &$tag)
-        {
+        foreach ($tagWeights as &$tag) {
             $tag = ceil($tag * $multiplier);
         }
 

@@ -2,7 +2,9 @@
 namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Blog;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Blog controller.
@@ -10,20 +12,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class BlogController extends Controller
 {
     /**
-     * @param Blog $blog
-     * @param      $slug
-     * @param      $comments
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route(
+     *      path="/{id}/{slug}",
+     *      name="blogger_blog_show",
+     *      requirements={"id"="\d+"}
+     * )
+     * @Template
      */
-    public function showAction(Blog $blog, $slug, $comments)
+    public function showAction(Blog $blog)
     {
-        return $this->render(
-            'BloggerBlogBundle:Blog:show.html.twig',
-            [
-                'blog'     => $blog,
-                'comments' => $blog->getComments(),
-            ]
-        );
+        return [
+            'post'     => $blog,
+            'comments' => $blog->getComments(),
+        ];
     }
 }

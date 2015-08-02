@@ -2,10 +2,11 @@
 namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Blog;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Blogger\BlogBundle\Entity\Comment;
 use Blogger\BlogBundle\Form\CommentType;
+use Symfony\Component\Routing\Annotation\Route;
 
 class CommentController extends Controller
 {
@@ -29,9 +30,18 @@ class CommentController extends Controller
     }
 
     /**
+<<<<<<< HEAD
      * @param Blog $blog
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+=======
+     * @Route(
+     *      path="/comment/{blog_id}",
+     *      name="blogger_blog_comment_create",
+     *      requirements={"blog_id"="\d+"}
+     * )
+     * @Method({"POST"})
+>>>>>>> develop
      */
     public function createAction(Blog $blog)
     {

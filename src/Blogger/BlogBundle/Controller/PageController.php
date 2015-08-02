@@ -3,36 +3,48 @@ namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Enquiry;
 use Blogger\BlogBundle\Form\EnquiryType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends Controller
 {
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route(
+     *      path="/",
+     *      name="blogger_blog_homepage"
+     * )
+     * @Template()
      */
     public function indexAction()
     {
-        $repository = $this->getDoctrine()->getRepository(
-            'BloggerBlogBundle:Blog'
-        );
-        $blogs = $repository->getLatestBlogs();
+        $repository = $this->getDoctrine()->getRepository('BloggerBlogBundle:Blog');
+        $posts = $repository->getLatestPosts();
 
-        return $this->render(
-            "@BloggerBlog/Page/index.html.twig", ['blogs' => $blogs]
-        );
+        return ['posts' => $posts];
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route(
+     *      path="/about",
+     *      name="blogger_blog_about"
+     * )
+     * @Template("@BloggerBlog/about.html.twig")
      */
     public function aboutAction()
     {
-        return $this->render("@BloggerBlog/about.html.twig");
+        return [];
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Route(
+     *      path="/contact",
+     *      name="blogger_blog_contact"
+     * )
+     * @Method({"GET", "POST"})
+     * @Template()
      */
     public function contactAction()
     {
@@ -40,6 +52,7 @@ class PageController extends Controller
         $form = $this->createForm(new EnquiryType(), $enquiry);
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
+
         if ($request->getMethod() == Request::METHOD_POST) {
 
             $form->handleRequest($request);
@@ -72,10 +85,7 @@ class PageController extends Controller
             }
         }
 
-        return $this->render(
-            "@BloggerBlog/Page/contact.html.twig",
-            ['form' => $form->createView()]
-        );
+        return ['form' => $form->createView()];
     }
 
     /**
