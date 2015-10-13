@@ -20,7 +20,7 @@ class LoginTypeTest extends TypeTestCase
         $form = $this->factory->create($type);
         $form->submit($formData);
         $this->assertTrue($form->isSynchronized());
-        $this->assertTrue($form->isValid(true));
+        $this->assertTrue($form->isValid());
         $this->assertEquals($formData, $form->getData());
     }
 
