@@ -2,10 +2,10 @@
 
 namespace AppBundle\Tests\Form;
 
-
 use AppBundle\Form\LoginType;
-use AppBundle\Form\Model\Login;
-use Symfony\Component\Form\Tests\Extension\Validator\Type\TypeTestCase;
+use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
+use Symfony\Component\Form\Test\TypeTestCase;
+use Symfony\Component\Validator\Validation;
 
 class LoginTypeTest extends TypeTestCase
 {
@@ -18,7 +18,16 @@ class LoginTypeTest extends TypeTestCase
 
         $type = new LoginType();
         $form = $this->factory->create($type);
+        $form->submit($formData);
+        $this->assertTrue($form->isSynchronized());
+        $this->assertTrue($form->isValid(true));
+        $this->assertEquals($formData, $form->getData());
+    }
 
-        $object = Login::fromArray($formData);
+    protected function getExtensions()
+    {
+        return array_merge(parent::getExtensions(), array(
+            new ValidatorExtension(Validation::createValidator()),
+        ));
     }
 }

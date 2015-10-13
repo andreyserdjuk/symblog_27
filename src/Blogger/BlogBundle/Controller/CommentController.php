@@ -6,7 +6,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Blogger\BlogBundle\Entity\Comment;
 use Blogger\BlogBundle\Form\CommentType;
-use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class CommentController extends Controller
 {
@@ -35,6 +36,7 @@ class CommentController extends Controller
      *      name="blogger_blog_comment_create",
      *      requirements={"blog_id"="\d+"}
      * )
+     * @ParamConverter("blog", class="BloggerBlogBundle:Blog", options={"mapping": {"blog_id": "id"}})
      * @Method({"POST"})
      */
     public function createAction(Blog $blog)
