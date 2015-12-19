@@ -1,36 +1,15 @@
-#security:
-#    providers:
-#        our_db_provider:
-#            entity:
-#                class: AppBundle\Entity\User
-#
-#    encoders:
+security:
+    providers:
+        our_db_provider:
+            entity:
+                class: AppBundle\Entity\User
+
+    encoders:
 #        AppBundle\Entity\User:
 #            algorithm: bcrypt
 #            cost: 12
-#
-#    firewalls:
-#        dev:
-#            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
-#            security: false
-#
-#        default:
-#            anonymous: ~
-#            pattern: ^/
-#            http_basic: ~
-#            provider: our_db_provider
-#            form_login:
-#                login_path: /login
-#                check_path: /login_check
-#
-#    access_control:
-#        - { path: ^/admin, roles: ROLE_ADMIN }
-#        - { path: ^/contact, roles: ROLE_USER }
-
-security:
-    encoders:
+        AppBundle\Entity\FOSUserChild: bcrypt
         FOS\UserBundle\Model\UserInterface: bcrypt
-        AppBundle\Entity\User: bcrypt
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
@@ -43,14 +22,23 @@ security:
     firewalls:
         main:
             pattern: ^/
+            http_basic: ~
             form_login:
                 provider: fos_userbundle
                 csrf_provider: security.csrf.token_manager # Use form.csrf_provider instead for Symfony <2.4
+                check_path: /fos/login_check
+                login_path: /fos/login
             logout:       true
             anonymous:    true
+        dev:
+            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
+            security: false
 
     access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/contact, roles: ROLE_USER }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
+#    access_control:
