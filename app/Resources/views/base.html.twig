@@ -9,6 +9,7 @@
     {% block stylesheets %}
         <link href='http://fonts.googleapis.com/css?family=Irish+Grover' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=La+Belle+Aurore' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         {% stylesheets
             'assets/css/*'
         %}
@@ -28,6 +29,7 @@
                         <li><a href="{{ path("blogger_blog_homepage") }}">Home</a></li>
                         <li><a href="{{ path("blogger_blog_about") }}">About</a></li>
                         <li><a href="{{ path("blogger_blog_contact") }}">Contact</a></li>
+                        <li><a href="{{ path("app_matrix_list") }}">Matrix</a></li>
                     </ul>
                 </nav>
             {% endblock %}

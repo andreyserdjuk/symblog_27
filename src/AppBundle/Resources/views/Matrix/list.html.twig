@@ -1,0 +1,54 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}AppBundle:Account:register{% endblock %}
+
+{% block body %}
+    <h2>Select group to edit form</h2>
+    {{ form(select_group) }}
+    {% if form_status_workflow_defs is defined %}
+        <h2>Matrix form</h2>
+        {{ form_start(form_status_workflow_defs) }}
+        {#{% form_theme form_status_workflow_defs _self %}#}
+
+        {#{% block _status_workflow_matrix %}#}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        {% for k1, m in matrix %}
+                            <th>{{ k1 }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for k1, m in matrix %}
+                        <tr>
+                            <td>{{ k1 }}</td>
+                            {% for k2, statusWorflowDef in m %}
+                                <td>
+                                    <input type="checkbox"
+                                           name="is_allowed_to_switch-{{ k1 }}-{{ k2 }}"
+                                           {# is not null - entity is in database #}
+                                           {% if statusWorflowDef.isMandatoryComment() is not null %}
+                                                checked="checked"
+                                           {% endif %}
+                                    />
+
+                                    <input type="checkbox"
+                                           name="is_mandatory_comment-{{ k1 }}-{{ k2 }}"
+                                           {% if statusWorflowDef.isMandatoryComment() %}
+                                                checked="checked"
+                                           {% endif %}
+                                    />
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {#{% endblock %}#}
+
+        {#{{ form_widget(form_status_workflow_defs) }}#}
+        {{ form_end(form_status_workflow_defs) }}
+    {% endif %}
+{% endblock %}
