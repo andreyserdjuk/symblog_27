@@ -23,7 +23,9 @@ class GroupStatusWorkflowDefinitionsType extends AbstractType
                 'collection',
                 [
                     'type' => new StatusWorkflowDefinitionType(),
-                    'allow_add' => false,
+//                    'data_class' => 'AppBundle\Entity\StatusWorkflowDefinition',
+//                    'prototype' => '_swd_entry_widget',
+//                    'allow_add' => true,
                     'label' => false,
                     'allow_delete' => false,
                     'allow_extra_fields' => true,
@@ -53,7 +55,8 @@ class GroupStatusWorkflowDefinitionsType extends AbstractType
         $defsMap = [];
         /** @var StatusWorkflowDefinition $savedDef */
         foreach ($selectedGroup->getStatusWorkflowDefinitions() as $savedDef) {
-            $defsMap[$savedDef->getCurrentStatus()][$savedDef->getNextStatus()] = true;
+//            $savedDef->setAllowedToSwitch(true);
+            $defsMap[$savedDef->getCurrentStatus()][$savedDef->getNextStatus()] = $savedDef;
         }
 
         $guess = [];
@@ -66,6 +69,7 @@ class GroupStatusWorkflowDefinitionsType extends AbstractType
                     $statusWorkflowDef->setCurrentStatus($k1);
                     $statusWorkflowDef->setNextStatus($k2);
                     $statusWorkflowDef->setIsMandatoryComment(null);
+                    $statusWorkflowDef->setGroup($selectedGroup);
                     $guess[$k1][$k2] = $statusWorkflowDef;
                     $selectedGroup->setStatusWorkflowDefinition($statusWorkflowDef);
                 }

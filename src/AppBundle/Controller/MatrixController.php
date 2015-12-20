@@ -34,9 +34,13 @@ class MatrixController extends Controller
         }
 
         // this method affects $selectedGroup, don't move it
-        $guess = GroupStatusWorkflowDefinitionsType::buildMatrix($selectedGroup);
 
-        $form = $this->createForm(new GroupStatusWorkflowDefinitionsType(), $selectedGroup, ['action' => $this->generateUrl('app_matrix_list', ['groupId'=>$selectedGroup->getId()])]);
+        $guess = GroupStatusWorkflowDefinitionsType::buildMatrix($selectedGroup);
+        $form = $this->createForm(
+            new GroupStatusWorkflowDefinitionsType()
+            ,$selectedGroup,
+            ['action' => $this->generateUrl('app_matrix_list', ['groupId'=>$selectedGroup->getId()])]
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $om = $this->getDoctrine()->getManager();
@@ -49,7 +53,7 @@ class MatrixController extends Controller
                 $om->persist($statusWorkflowDefinition);
                 if ($statusWorkflowDefinition->isAllowedToSwitch()) {
                 } else {
-                    $om->remove($statusWorkflowDefinition);
+//                    $om->remove($statusWorkflowDefinition);
                 }
             }
             $om->flush();

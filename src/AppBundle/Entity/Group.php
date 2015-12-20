@@ -44,7 +44,7 @@ class Group extends BaseGroup
      */
     public function getStatusWorkflowDefinitions()
     {
-        return $this->statusWorkflowDefinitions;
+        return $this->statusWorkflowDefinitions->toArray();
     }
 
     /**

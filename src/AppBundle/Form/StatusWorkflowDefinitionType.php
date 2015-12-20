@@ -15,13 +15,14 @@ class StatusWorkflowDefinitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
             $builder
-            ->add(
-                'group',
-                'hidden',
-                [
-                    'label' => false,
-                ]
-            )
+//            ->add(
+//                'group',
+//                'hidden',
+//                [
+//                    'data_class' => 'AppBundle\Entity\Group',
+//                    'label' => false,
+//                ]
+//            )
             ->add(
                 'currentStatus',
                 'hidden'
