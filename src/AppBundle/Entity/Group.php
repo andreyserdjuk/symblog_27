@@ -20,7 +20,7 @@ class Group extends BaseGroup
     protected $id;
 
     /**
-     * @var StatusWorkflowDefinition
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\StatusWorkflowDefinition", mappedBy="group")
      */
     protected $statusWorkflowDefinitions;

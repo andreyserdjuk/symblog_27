@@ -14,15 +14,14 @@ class StatusWorkflowDefinitionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $allStatuses = StatusWorkflowDefinition::getAllStatuses();
-        $builder
-//            ->add(
-//                'group',
-//                'hidden',
-//                [
-//                    ''
-//                ]
-//            )
+            $builder
+            ->add(
+                'group',
+                'hidden',
+                [
+                    'label' => false,
+                ]
+            )
             ->add(
                 'currentStatus',
                 'hidden'
@@ -33,33 +32,34 @@ class StatusWorkflowDefinitionType extends AbstractType
             )
             ->add(
                 'isMandatoryComment',
-                'checkbox'
-            )
-            ->add(
-                'is_allowed_to_switch',
                 'checkbox',
                 [
-                    'mapped' => false,
+                    'label' => false,
+                    'required' => false,
                 ]
             )
             ->add(
-                'save',
-                'submit'
+                'allowed_to_switch',
+                'checkbox',
+                [
+                    'label' => false,
+                    'required' => false,
+                ]
             )
         ;
     }
 
-//    public function configureOptions(OptionsResolver $resolver)
-//    {
-//        $resolver->setDefaults([
-//            'data_class' => 'AppBundle\Entity\StatusWorkflowDefinition',
-//        ]);
-//    }
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function configureOptions(OptionsResolver $resolver)
     {
-//        $view->
+        $resolver->setDefaults([
+            'data_class' => 'AppBundle\Entity\StatusWorkflowDefinition',
+        ]);
     }
-
+//    public function buildView(FormView $view, FormInterface $form, array $options)
+//    {
+////        $view->
+//    }
+//
 
     public function getName()
     {

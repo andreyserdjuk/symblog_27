@@ -26,6 +26,7 @@ class StatusWorkflowDefinition
      *
      * @ORM\Id()
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Group", inversedBy="statusWorkflowDefinitions")
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
      */
     protected $group;
 
@@ -50,6 +51,11 @@ class StatusWorkflowDefinition
      * @ORM\Column(name="is_mandatory_comment", type="boolean")
      */
     protected $mandatoryComment;
+
+    /**
+     * @var bool
+     */
+    protected $allowedToSwitch;
 
     /**
      * @return mixed
@@ -105,5 +111,37 @@ class StatusWorkflowDefinition
     public static function getAllStatuses()
     {
         return self::$allStatuses;
+    }
+
+    /**
+     * @return Group
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * @param Group $group
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isAllowedToSwitch()
+    {
+        return $this->allowedToSwitch;
+    }
+
+    /**
+     * @param boolean $allowedToSwitch
+     */
+    public function setAllowedToSwitch($allowedToSwitch)
+    {
+        $this->allowedToSwitch = $allowedToSwitch;
     }
 }

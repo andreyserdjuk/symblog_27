@@ -20,83 +20,66 @@ use Symfony\Component\HttpFoundation\Request;
 class MatrixController extends Controller
 {
     /**
-     * @Route("/list")
+     * @Route("/list/{groupId}")
      * @Template
      * @param Request $request
-     * @return array Render with two forms:
-     *
-     * Render with two forms:
-     * - select user - if submitted, the second will be rendered below:
-     * - status workflow definitions matrix - rendered for the special group.
-     *
-     * 1. request - show groups list
-     * 2. r - select and submit group => build status workflow definitions matrix
-     * 3. r - submit status workflow definitions matrix => draw saved matrix form
+     * @param $groupId
+     * @return array
      */
-    public function listAction(Request $request)
+    public function listAction(Request $request, $groupId = null)
     {
-        $selectGroupForm = $this->createForm(new SelectGroupType());
-        $selectGroupForm->handleRequest($request);
-
-        // if we got group, we can setup
-        if ($selectGroupForm->isSubmitted() && $selectGroupForm->isValid()) {
-            /** @var Group $selectedGroup */
-            $selectedGroup = $selectGroupForm->get('group')->getData();
-        } else {
-            return ['select_group' => $selectGroupForm->createView()];
+        $selectedGroup = $this->getDoctrine()->getRepository('AppBundle:Group')->find($groupId);
+        if (!$selectedGroup) {
+            return new RedirectResponse($this->generateUrl('app_matrix_selectgroup'));
         }
 
-        $defsMap = [];
-        /** @var StatusWorkflowDefinition $savedDef */
-        foreach ($selectedGroup->getStatusWorkflowDefinitions() as $savedDef) {
-            $defsMap[$savedDef->getCurrentStatus()][$savedDef->getNextStatus()] = true;
-        }
+        // this method affects $selectedGroup, don't move it
+        $guess = GroupStatusWorkflowDefinitionsType::buildMatrix($selectedGroup);
 
-        $guess = [];
-        foreach (StatusWorkflowDefinition::getAllStatuses() as $k1 => $v1) {
-            foreach (StatusWorkflowDefinition::getAllStatuses() as $k2 => $v2) {
-                if (isset($defsMap[$k1][$k2])) {
-                    $guess[$k1][$k2] = $defsMap[$k1][$k2];
+        $form = $this->createForm(new GroupStatusWorkflowDefinitionsType(), $selectedGroup, ['action' => $this->generateUrl('app_matrix_list', ['groupId'=>$selectedGroup->getId()])]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $om = $this->getDoctrine()->getManager();
+            // save data
+            $group = $form->getData();
+            /** @var StatusWorkflowDefinition $statusWorkflowDefinition */
+            foreach ($group->getStatusWorkflowDefinitions() as $statusWorkflowDefinition) {
+                $om->refresh($group);
+                $statusWorkflowDefinition->setGroup($group);
+                $om->persist($statusWorkflowDefinition);
+                if ($statusWorkflowDefinition->isAllowedToSwitch()) {
                 } else {
-                    $statusWorkflowDef = new StatusWorkflowDefinition();
-                    $statusWorkflowDef->setCurrentStatus($k1);
-                    $statusWorkflowDef->setNextStatus($k2);
-                    $statusWorkflowDef->setIsMandatoryComment(null);
-                    $guess[$k1][$k2] = $statusWorkflowDef;
+                    $om->remove($statusWorkflowDefinition);
                 }
             }
+            $om->flush();
         }
 
-        $wf = $this->createForm(
-            new GroupStatusWorkflowDefinitionsType(),
-            null,
-            ['action' => $this->generateUrl('app_matrix_save')]
-        );
-        $wf->handleRequest($request);
-        if ($wf->isValid() && $wf->isSubmitted()) {
-            var_dump($wf->getData());exit;
-        }
+//        $selectGroupForm = $this->createForm(new SelectGroupType());
+//        $selectGroupForm->handleRequest($request);
 
         return [
-            'form_status_workflow_defs' => $wf->createView(),
-            'select_group' => $selectGroupForm->createView(),
+            'form' => $form->createView(),
             'matrix' => $guess,
+//            'select_group' => $selectGroupForm->createView(),
         ];
     }
 
     /**
-     * @Route(path="/save", name="app_matrix_save")
-     * @Method("POST")
+     * @Route("/select-group")
      * @param Request $request
      * @return array
+     * @Template("@App/Matrix/list.html.twig")
      */
-    public function saveAction(Request $request)
+    public function selectGroupAction(Request $request)
     {
-        $wf = $this->createForm(new GroupStatusWorkflowDefinitionsType(), new Group('some_name', []), ['action' => $this->generateUrl('app_matrix_save')]);
-        $wf->handleRequest($request);
-        if ($wf->isSubmitted() && $wf->isValid()) {
-            var_dump($wf->getData());exit;
+        $selectGroupForm = $this->createForm(new SelectGroupType());
+        $selectGroupForm->handleRequest($request);
+        if ($selectGroupForm->isSubmitted() && $selectGroupForm->isValid()) {
+            /** @var Group $selectedGroup */
+            $selectedGroup = $selectGroupForm->get('group')->getData();
+            return new RedirectResponse($this->generateUrl('app_matrix_list', ['groupId' => $selectedGroup->getId(),]));
         }
-        return new RedirectResponse($this->generateUrl('app_matrix_list'));
+        return ['select_group' => $selectGroupForm->createView(),];
     }
 }
