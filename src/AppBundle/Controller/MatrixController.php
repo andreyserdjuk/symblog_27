@@ -6,7 +6,6 @@ use AppBundle\Entity\Group;
 use AppBundle\Entity\StatusWorkflowDefinition;
 use AppBundle\Form\GroupStatusWorkflowDefinitionsType;
 use AppBundle\Form\SelectGroupType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -26,46 +25,57 @@ class MatrixController extends Controller
      * @param $groupId
      * @return array
      */
-    public function listAction(Request $request, $groupId = null)
+    public function listAction(Request $request, $groupId)
     {
+        $selectGroupForm = $this->createForm(new SelectGroupType());
+        $selectGroupForm->handleRequest($request);
+        if ($selectGroupForm->isSubmitted() && $selectGroupForm->isSubmitted()) {
+            $selectedGroup = $selectGroupForm->get('group')->getData();
+            return $this->redirectToRoute('app_matrix_list', ['groupId' => $selectedGroup->getId(),]);
+        }
+
         $selectedGroup = $this->getDoctrine()->getRepository('AppBundle:Group')->find($groupId);
         if (!$selectedGroup) {
             return new RedirectResponse($this->generateUrl('app_matrix_selectgroup'));
         }
 
         // this method affects $selectedGroup, don't move it
-
         $guess = GroupStatusWorkflowDefinitionsType::buildMatrix($selectedGroup);
+
         $form = $this->createForm(
             new GroupStatusWorkflowDefinitionsType()
             ,$selectedGroup,
-            ['action' => $this->generateUrl('app_matrix_list', ['groupId'=>$selectedGroup->getId()])]
+            ['action' => $this->generateUrl('app_matrix_list', ['groupId' => $selectedGroup->getId()])]
         );
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $om = $this->getDoctrine()->getManager();
+
             // save data
+            /** @var Group $group */
             $group = $form->getData();
+
             /** @var StatusWorkflowDefinition $statusWorkflowDefinition */
             foreach ($group->getStatusWorkflowDefinitions() as $statusWorkflowDefinition) {
-                $om->refresh($group);
                 $statusWorkflowDefinition->setGroup($group);
-                $om->persist($statusWorkflowDefinition);
+
                 if ($statusWorkflowDefinition->isAllowedToSwitch()) {
+                    $om->persist($statusWorkflowDefinition);
                 } else {
-//                    $om->remove($statusWorkflowDefinition);
+                    $om->remove($statusWorkflowDefinition);
                 }
             }
+
+            $group->getStatusWorkflowDefinitions()->clear();
             $om->flush();
         }
-
-//        $selectGroupForm = $this->createForm(new SelectGroupType());
-//        $selectGroupForm->handleRequest($request);
 
         return [
             'form' => $form->createView(),
             'matrix' => $guess,
-//            'select_group' => $selectGroupForm->createView(),
+            'select_group' => $selectGroupForm->createView(),
         ];
     }
 
@@ -82,7 +92,7 @@ class MatrixController extends Controller
         if ($selectGroupForm->isSubmitted() && $selectGroupForm->isValid()) {
             /** @var Group $selectedGroup */
             $selectedGroup = $selectGroupForm->get('group')->getData();
-            return new RedirectResponse($this->generateUrl('app_matrix_list', ['groupId' => $selectedGroup->getId(),]));
+            return $this->redirectToRoute('app_matrix_list', ['groupId' => $selectedGroup->getId(),]);
         }
         return ['select_group' => $selectGroupForm->createView(),];
     }

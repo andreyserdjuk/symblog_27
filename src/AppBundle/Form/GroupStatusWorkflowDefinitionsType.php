@@ -2,15 +2,10 @@
 
 namespace AppBundle\Form;
 
-
 use AppBundle\Entity\Group;
 use AppBundle\Entity\StatusWorkflowDefinition;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GroupStatusWorkflowDefinitionsType extends AbstractType
@@ -23,12 +18,7 @@ class GroupStatusWorkflowDefinitionsType extends AbstractType
                 'collection',
                 [
                     'type' => new StatusWorkflowDefinitionType(),
-//                    'data_class' => 'AppBundle\Entity\StatusWorkflowDefinition',
-//                    'prototype' => '_swd_entry_widget',
-//                    'allow_add' => true,
                     'label' => false,
-                    'allow_delete' => false,
-                    'allow_extra_fields' => true,
                 ]
             )
             ->add(
@@ -55,8 +45,8 @@ class GroupStatusWorkflowDefinitionsType extends AbstractType
         $defsMap = [];
         /** @var StatusWorkflowDefinition $savedDef */
         foreach ($selectedGroup->getStatusWorkflowDefinitions() as $savedDef) {
-//            $savedDef->setAllowedToSwitch(true);
             $defsMap[$savedDef->getCurrentStatus()][$savedDef->getNextStatus()] = $savedDef;
+            $savedDef->setAllowedToSwitch(true);
         }
 
         $guess = [];
@@ -68,7 +58,8 @@ class GroupStatusWorkflowDefinitionsType extends AbstractType
                     $statusWorkflowDef = new StatusWorkflowDefinition();
                     $statusWorkflowDef->setCurrentStatus($k1);
                     $statusWorkflowDef->setNextStatus($k2);
-                    $statusWorkflowDef->setIsMandatoryComment(null);
+                    $statusWorkflowDef->setIsMandatoryComment(false);
+                    $statusWorkflowDef->setAllowedToSwitch(false);
                     $statusWorkflowDef->setGroup($selectedGroup);
                     $guess[$k1][$k2] = $statusWorkflowDef;
                     $selectedGroup->setStatusWorkflowDefinition($statusWorkflowDef);

@@ -15,14 +15,6 @@ class StatusWorkflowDefinitionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
             $builder
-//            ->add(
-//                'group',
-//                'hidden',
-//                [
-//                    'data_class' => 'AppBundle\Entity\Group',
-//                    'label' => false,
-//                ]
-//            )
             ->add(
                 'currentStatus',
                 'hidden'
@@ -32,7 +24,7 @@ class StatusWorkflowDefinitionType extends AbstractType
                 'hidden'
             )
             ->add(
-                'isMandatoryComment',
+                'allowed_to_switch',
                 'checkbox',
                 [
                     'label' => false,
@@ -40,7 +32,7 @@ class StatusWorkflowDefinitionType extends AbstractType
                 ]
             )
             ->add(
-                'allowed_to_switch',
+                'isMandatoryComment',
                 'checkbox',
                 [
                     'label' => false,
@@ -53,14 +45,10 @@ class StatusWorkflowDefinitionType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
+            'csrf_protection' => false,
             'data_class' => 'AppBundle\Entity\StatusWorkflowDefinition',
         ]);
     }
-//    public function buildView(FormView $view, FormInterface $form, array $options)
-//    {
-////        $view->
-//    }
-//
 
     public function getName()
     {
