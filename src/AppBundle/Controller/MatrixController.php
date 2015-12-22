@@ -36,9 +36,17 @@ class MatrixController extends Controller
         $guess = GroupStatusWorkflowDefinitionsType::buildMatrix($selectedGroup);
 
         $form = $this->createForm(
-            new GroupStatusWorkflowDefinitionsType()
-            ,$selectedGroup,
-            ['action' => $this->generateUrl('app_matrix_list', ['groupId' => $selectedGroup->getId()])]
+            new GroupStatusWorkflowDefinitionsType(),
+            $selectedGroup,
+            [
+                'action' => $this
+                    ->generateUrl(
+                        'app_matrix_list',
+                        [
+                            'groupId' => $selectedGroup->getId(),
+                        ]
+                    )
+            ]
         );
 
         $form->handleRequest($request);

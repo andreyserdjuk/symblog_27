@@ -79,9 +79,7 @@ class PageController extends Controller
                     'Your contact enquiry was successfully sent. Thank you!'
                 );
 
-                return $this->redirect(
-                    $this->generateUrl('blogger_blog_contact')
-                );
+                return $this->redirectToRoute('blogger_blog_contact');
             }
         }
 

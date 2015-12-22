@@ -23,10 +23,11 @@ class CommentController extends Controller
         $form = $this->createForm(new CommentType(), $comment);
 
         return $this->render(
-            'BloggerBlogBundle:Comment:form.html.twig', array(
-            'comment' => $comment,
-            'form'    => $form->createView(),
-        )
+            'BloggerBlogBundle:Comment:form.html.twig',
+            [
+                'comment' => $comment,
+                'form'    => $form->createView(),
+            ]
         );
     }
 
@@ -59,11 +60,10 @@ class CommentController extends Controller
                     'blogger_blog_show',
                     [
                         'id'   => $comment->getBlog()->getId(),
-                        'slug' => $comment->getBlog()->getSlug().'#comment'
-                            .$comment->getId(),
+                        'slug' => $comment->getBlog()->getSlug() . '#comment' . $comment->getId(),
                     ]
                 )
-                .'#comment-'.$comment->getId()
+                . '#comment-' . $comment->getId()
             );
         }
 
