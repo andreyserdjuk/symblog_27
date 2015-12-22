@@ -27,13 +27,6 @@ class MatrixController extends Controller
      */
     public function listAction(Request $request, $groupId)
     {
-        $selectGroupForm = $this->createForm(new SelectGroupType());
-        $selectGroupForm->handleRequest($request);
-        if ($selectGroupForm->isSubmitted() && $selectGroupForm->isSubmitted()) {
-            $selectedGroup = $selectGroupForm->get('group')->getData();
-            return $this->redirectToRoute('app_matrix_list', ['groupId' => $selectedGroup->getId(),]);
-        }
-
         $selectedGroup = $this->getDoctrine()->getRepository('AppBundle:Group')->find($groupId);
         if (!$selectedGroup) {
             return new RedirectResponse($this->generateUrl('app_matrix_selectgroup'));
@@ -75,7 +68,6 @@ class MatrixController extends Controller
         return [
             'form' => $form->createView(),
             'matrix' => $guess,
-            'select_group' => $selectGroupForm->createView(),
         ];
     }
 
