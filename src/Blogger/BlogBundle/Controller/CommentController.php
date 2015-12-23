@@ -3,6 +3,7 @@ namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Blog;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Blogger\BlogBundle\Entity\Comment;
 use Blogger\BlogBundle\Form\CommentType;
@@ -15,6 +16,7 @@ class CommentController extends Controller
      * @param Blog $blog
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     * @Template()
      */
     public function newAction(Blog $blog)
     {
@@ -22,13 +24,10 @@ class CommentController extends Controller
         $comment->setBlog($blog);
         $form = $this->createForm(new CommentType(), $comment);
 
-        return $this->render(
-            'BloggerBlogBundle:Comment:form.html.twig',
-            [
-                'comment' => $comment,
-                'form'    => $form->createView(),
-            ]
-        );
+        return [
+            'comment' => $comment,
+            'form'    => $form->createView(),
+        ];
     }
 
     /**
@@ -39,6 +38,7 @@ class CommentController extends Controller
      * )
      * @ParamConverter("blog", class="BloggerBlogBundle:Blog", options={"mapping": {"blog_id": "id"}})
      * @Method({"POST"})
+     * @Template()
      */
     public function createAction(Blog $blog)
     {
@@ -67,12 +67,9 @@ class CommentController extends Controller
             );
         }
 
-        return $this->render(
-            'BloggerBlogBundle:Comment:create.html.twig',
-            [
-                'comment' => $comment,
-                'form'    => $form->createView(),
-            ]
-        );
+        return [
+            'comment' => $comment,
+            'form'    => $form->createView(),
+        ];
     }
 }

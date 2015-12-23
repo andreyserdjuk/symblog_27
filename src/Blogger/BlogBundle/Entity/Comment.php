@@ -1,5 +1,4 @@
 <?php
-// src/Blogger/BlogBundle/Entity/Comment.php
 
 namespace Blogger\BlogBundle\Entity;
 

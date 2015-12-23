@@ -87,27 +87,23 @@ class PageController extends Controller
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Template()
      */
     public function sidebarAction()
     {
-        $blogRepo = $this->getDoctrine()->getRepository(
-            'BloggerBlogBundle:Blog'
-        );
+        $blogRepo = $this->getDoctrine()->getRepository('BloggerBlogBundle:Blog');
         $tags = $blogRepo->getTags();
         $tagWeights = $blogRepo->getTagWeights($tags);
 
-        $commentLimit = $this->container->getParameter(
-            'blogger_blog.comments.latest_comment_limit'
-        );
+        $commentLimit = $this->container->getParameter('blogger_blog.comments.latest_comment_limit');
 
         $latestComments = $this->getDoctrine()
             ->getRepository('BloggerBlogBundle:Comment')
             ->getLatestComments($commentLimit);
 
-        return $this->render(
-            'BloggerBlogBundle:Page:sidebar.html.twig',
-            ['tags' => $tagWeights, 'latestComments' => $latestComments]
-        );
+        return [
+            'tags' => $tagWeights,
+            'latestComments' => $latestComments
+        ];
     }
 }

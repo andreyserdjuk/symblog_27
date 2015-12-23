@@ -20,12 +20,12 @@ class CommentRepository extends EntityRepository
             ->addOrderBy('c.created')
             ->setParameter('blog_id', $blogId);
 
-        if (false === is_null($approved))
+        if (false === is_null($approved)) {
             $qb->andWhere('c.approved = :approved')
                 ->setParameter('approved', $approved);
+        }
 
-        return $qb->getQuery()
-            ->getResult();
+        return $qb->getQuery()->getResult();
     }
 
 
