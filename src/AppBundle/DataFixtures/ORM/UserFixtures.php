@@ -37,9 +37,10 @@ class UserFixtures implements FixtureInterface, ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
+        $userManager = $this->container->get('fos_user.user_manager');
         $passwordEncoder = $this->container->get('security.password_encoder');
 
-        $user = new FOSUserChild();
+        $user = $userManager->createUser();
         $user->setEmail('fixture@superadmin.com');
         $user->setEnabled(true);
         $user->setPassword(
@@ -49,5 +50,7 @@ class UserFixtures implements FixtureInterface, ContainerAwareInterface
         $user->setUsername('fix');
         $manager->persist($user);
         $manager->flush();
+
+        $userManager->updateUser($user, true);
     }
 }
