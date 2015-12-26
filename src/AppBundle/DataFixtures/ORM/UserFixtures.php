@@ -3,15 +3,19 @@
 namespace AppBundle\DataFixtures\ORM;
 
 
+use AppBundle\Entity\FOSUserChild;
 use AppBundle\Entity\User;
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class UserFixtures implements FixtureInterface, ContainerAwareInterface
 {
+    /**
+     * @var Container
+     */
     private $container;
 
     /**
@@ -35,12 +39,13 @@ class UserFixtures implements FixtureInterface, ContainerAwareInterface
     {
         $passwordEncoder = $this->container->get('security.password_encoder');
 
-        $user = new User();
-        $user->setEmail('fix@fix.com');
-        $user->setIsActive(true);
+        $user = new FOSUserChild();
+        $user->setEmail('fixture@superadmin.com');
+        $user->setEnabled(true);
         $user->setPassword(
             $passwordEncoder->encodePassword($user, '12345')
         );
+        $user->setRoles(['ROLE_SUPER_ADMIN']);
         $user->setUsername('fix');
         $manager->persist($user);
         $manager->flush();
