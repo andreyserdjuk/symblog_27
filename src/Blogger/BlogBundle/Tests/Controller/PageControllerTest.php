@@ -29,7 +29,7 @@ class PageControllerTest extends WebTestCase
 		$client = static::createClient();
 
 		$crawler = $client->request(Request::METHOD_GET, '/contact');
-
+// todo: consider login form at first
 		$this->assertEquals(1, $crawler->filter('h1:contains("Contact symblog")')->count());
 
 		$form = $crawler->selectButton('Submit')->form();
