@@ -26,8 +26,8 @@ class LoginTypeTest extends TypeTestCase
 
     protected function getExtensions()
     {
-        return array_merge(parent::getExtensions(), array(
+        return array_merge(parent::getExtensions(), [
             new ValidatorExtension(Validation::createValidator()),
-        ));
+        ]);
     }
 }

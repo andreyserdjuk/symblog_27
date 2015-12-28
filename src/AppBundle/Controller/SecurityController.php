@@ -29,11 +29,11 @@ class SecurityController extends Controller
             ['action' => $this->generateUrl('login_check')]
         );
 
-        return $this->render('AppBundle:Security:login.html.twig', array(
+        return $this->render('AppBundle:Security:login.html.twig', [
             'last_auth_error' => $lastAuthError,
             'last_auth_user' => $lastAuthUser,
             'form' => $form->createView()
-        ));
+        ]);
     }
 
     /**
@@ -53,9 +53,9 @@ class SecurityController extends Controller
             $formData = $form->getData();
         }
 
-        return $this->render('AppBundle:Security:loginCheck.html.twig', array(
+        return $this->render('AppBundle:Security:loginCheck.html.twig', [
             'form_data' => $formData
-        ));
+        ]);
     }
 
 }

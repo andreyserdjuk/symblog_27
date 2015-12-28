@@ -17,9 +17,9 @@ class AccountController extends Controller
             ['action' => $this->generateUrl('account_create')]
         );
 
-        return $this->render('AppBundle:Account:register.html.twig', array(
+        return $this->render('AppBundle:Account:register.html.twig', [
                 'form' => $form->createView()
-            ));    
+            ]);
     }
 
     public function createAction(Request $request)
