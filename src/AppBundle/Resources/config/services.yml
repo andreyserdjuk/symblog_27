@@ -1,0 +1,6 @@
+services:
+    app.user.password_resetting:
+        class: AppBundle\EventListener\PasswordResettingListener
+        arguments: [@router]
+        tags:
+            - { name: kernel.event_subscriber }
