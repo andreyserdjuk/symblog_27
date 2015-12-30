@@ -35,22 +35,6 @@ class FOSUserChild extends BaseUser
     }
 
     /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGroups()
-    {
-        return $this->groups;
-    }
-
-    /**
      * @param Group $group
      */
     public function setGroup(Group $group)
