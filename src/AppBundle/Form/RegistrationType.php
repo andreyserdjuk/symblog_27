@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RegistrationType extends AbstractType
 {
@@ -14,17 +15,37 @@ class RegistrationType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('user', new UserType());
         $builder->add(
-            'terms',
-            'checkbox',
-            ['property_path' => 'termsAccepted']
+            'username',
+            'text',
+            [
+                // 'position' is handled by https://github.com/egeloen/IvoryOrderedFormBundle
+                'position' => 'first',
+                'label' => 'user name'
+            ]
         );
-        $builder->add('Register', 'submit');
     }
 
     public function getName()
     {
-        return 'registration';
+        return $this->getBlockPrefix();
+    }
+
+    public function getParent()
+    {
+        return 'FOS\UserBundle\Form\Type\RegistrationFormType';
+    }
+
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(array(
+            'data_class' => 'AppBundle\Entity\FOSUserChild',
+            'intention'  => 'registration',
+        ));
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'app_user_registration';
     }
 }
