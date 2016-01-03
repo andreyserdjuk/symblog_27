@@ -28,6 +28,15 @@ class FOSUserChild extends BaseUser
      */
     protected $groups;
 
+    /**
+     * Passport code
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="passport_code", length=20, nullable=true)
+     */
+    protected $passportCode='';
+
     public function __construct()
     {
         parent::__construct();
@@ -40,5 +49,21 @@ class FOSUserChild extends BaseUser
     public function setGroup(Group $group)
     {
         $this->groups[] = $group;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassportCode()
+    {
+        return $this->passportCode;
+    }
+
+    /**
+     * @param string $passportCode
+     */
+    public function setPassportCode($passportCode)
+    {
+        $this->passportCode = $passportCode;
     }
 }

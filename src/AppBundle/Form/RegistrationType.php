@@ -6,6 +6,7 @@ namespace AppBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class RegistrationType extends AbstractType
 {
@@ -16,12 +17,15 @@ class RegistrationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(
-            'username',
+            'passportCode',
             'text',
             [
                 // 'position' is handled by https://github.com/egeloen/IvoryOrderedFormBundle
                 'position' => 'first',
-                'label' => 'user name'
+                'required' => false,
+                'constraints' => [
+                    new Length(['max' => 20]),
+                ]
             ]
         );
     }
