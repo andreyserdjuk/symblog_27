@@ -30,6 +30,9 @@
                         <li><a href="{{ path("blogger_blog_about") }}">About</a></li>
                         <li><a href="{{ path("blogger_blog_contact") }}">Contact</a></li>
                         <li><a href="{{ path("app_matrix_selectgroup") }}">Matrix</a></li>
+                        {% if app.user is null  %}
+                        <li><a href="{{ path("fos_user_registration_register") }}">Register</a></li>
+                        {% endif %}
                     </ul>
                 </nav>
             {% endblock %}
