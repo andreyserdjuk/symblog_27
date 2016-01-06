@@ -6,6 +6,6 @@ services:
             - { name: kernel.event_subscriber }
     app.user.registration_init:
         class: AppBundle\EventListener\RegistrationInitListener
-        arguments: [@router]
+        arguments: [ @router, @security.token_storage ]
         tags:
-            - { name: kernel.event_subscriber, tokenStorage: security.token_storage }
+            - { name: kernel.event_subscriber }

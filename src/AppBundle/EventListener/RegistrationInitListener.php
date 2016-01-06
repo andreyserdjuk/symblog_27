@@ -3,6 +3,7 @@
 namespace AppBundle\EventListener;
 
 use FOS\UserBundle\FOSUserEvents;
+use FOS\UserBundle\Model\UserInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -33,9 +34,11 @@ class RegistrationInitListener implements EventSubscriberInterface
 
     public function onRegistrationInitialize(GetResponseUserEvent $event)
     {
-        // TODO: redirect to homepage if already authorized
-        $url = $this->router->generate('homepage');
+        $user = $this->tokenStorage->getToken()->getUser();
 
-        $event->setResponse(new RedirectResponse($url));
+        if ($user instanceof UserInterface) {
+            $url = $this->router->generate('homepage');
+            $event->setResponse(new RedirectResponse($url));
+        }
     }
 }
