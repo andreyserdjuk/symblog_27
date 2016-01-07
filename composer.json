@@ -2,6 +2,8 @@
     "name": "andrej/awesome",
     "license": "proprietary",
     "type": "project",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "": "src/",
@@ -28,7 +30,8 @@
         "egeloen/ordered-form-bundle": "2.0.*"
     },
     "require-dev": {
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "stage1/docker-php": "dev-master"
     },
     "scripts": {
         "post-root-package-install": [
