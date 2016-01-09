@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use Docker\Container;
+use Docker\Context\ContextBuilder;
 use Docker\Docker;
 use Docker\Http\DockerClient;
 use GuzzleHttp\Exception\RequestException;
@@ -40,87 +41,89 @@ class DockerContainersCommand extends ContainerAwareCommand
 
         $client = new DockerClient(array(), 'unix:///var/run/docker.sock');
         $docker = new Docker($client);
-
         $containerManager = $docker->getContainerManager();
         $imageManager = $docker->getImageManager();
 
         $containers = [
             'percona-symblog' => [
-                'container' => [
-                    'Image' => 'percona-symblog',
-                    'Env' => [
-                        'MYSQL_ROOT_PASSWORD=12345'
-                    ],
+                'Image' => 'percona-symblog',
+                'Env' => [
+                    'MYSQL_ROOT_PASSWORD=12345'
                 ],
-                'image' => <<<DOCKFILE
-FROM percona:latest
-RUN apt-get update
-RUN apt-get install -y vim
-DOCKFILE
             ],
             'php53-symblog' => [
-                'container' => [
-                    'Image' => 'php53-symblog',
-                    'ExposedPorts' => ['80/tcp' => []],
-                    'HostConfig' => [
-                        'PortBindings' => [
-                            '80/tcp' => [
-                                ['HostPort' => '8080'],
-                            ],
+                'Image' => 'php53-symblog',
+                'ExposedPorts' => ['80/tcp' => []],
+                'HostConfig' => [
+                    'PortBindings' => [
+                        '80/tcp' => [
+                            ['HostPort' => '8080'],
                         ],
-                        'Links' => [
-                            'percona-symblog:mysql'
-                        ],
-                        'Binds' => [
-                            '/var/www:/var/www',
-                            '/etc/passwd:/etc/passwd',
-                            '/etc/group:/etc/group',
-                        ]
+                    ],
+                    'Links' => [
+                        'percona-symblog:mysql'
+                    ],
+                    'Binds' => [
+                        '/var/www:/var/www',
+                        '/etc/passwd:/etc/passwd',
+                        '/etc/group:/etc/group',
                     ]
-                ],
-                'image' => <<<DOCKFILE
-FROM markfletcher/php5.3-zend
-
-RUN apt-get update
-RUN apt-get install -y vim
-RUN apt-get install -y mysql-client php5-mysqlnd
-
-EXPOSE 80
-CMD ["apache2", "-DFOREGROUND"]
-DOCKFILE
+                ]
             ]
         ];
 
+        if ($purge) {
+            try {
+                $imageManager->removeImages(['percona-symblog', 'php53-symblog'], true);
+            } catch (RequestException $e) {
+            }
+        }
+
+        if ($command === 'start') {
+            $contextBuilder = new ContextBuilder();
+            $contextBuilder->from('percona:latest');
+            $contextBuilder->run('apt-get update');
+            $contextBuilder->run('apt-get install -y vim');
+            $docker->build($contextBuilder->getContext(), 'percona-symblog');
+
+            $contextBuilder = new ContextBuilder();
+            $contextBuilder->from('markfletcher/php5.3-zend');
+            $contextBuilder->run('apt-get update');
+            $contextBuilder->run('apt-get install -y vim');
+            $contextBuilder->run('apt-get install -y mysql-client php5-mysqlnd');
+            $docker->build($contextBuilder->getContext(), 'php53-symblog');
+        }
+
         foreach ($containers as $containerName => $containerParams) {
-            $imageManager->build($containerParams['image'], null, ['t' => $containerName, 'nocache' => $purge]);
             try {
                 $container = $containerManager->find($containerName);
             } catch (RequestException $e) {
                 $container = null;
             }
 
-            if (($container instanceof Container && $purge) ||
-                (!$container instanceof Container)
-            ) {
-                if ($container instanceof Container && $purge) {
+            if ($container instanceof Container && $purge) {
+                try {
                     $containerManager->remove($container, false, true);
+                } catch (RequestException $e) {
                 }
-
-                $container = new Container($containerParams['container']);
-                $container->setName($containerName);
-                $containerManager->create($container);
             }
 
-            $runtimeInfo = $container->getRuntimeInformations();
-
-            if ($command === 'start' &&
-                (!isset($runtimeInfo['State']['Running']) || !$runtimeInfo['State']['Running'])
-            ) {
+            if ($command === 'start') {
+                $container = new Container($containerParams);
+                $container->setName($containerName);
+                $containerManager->create($container);
                 $containerManager->start($container);
-            } elseif ($command === 'stop' &&
-                (isset($runtimeInfo['State']['Running']) && $runtimeInfo['State']['Running'])
-            ) {
-                $containerManager->stop($container);
+            }
+
+            if ($command === 'stop' && $container instanceof Container) {
+                try {
+                    $runtimeInfo = $container->getRuntimeInformations();
+                    if (isset($runtimeInfo['State']['Running']) && $runtimeInfo['State']['Running']) {
+                        $containerManager->stop($container);
+                    }
+                } catch (RequestException $e) {
+                    $stdout->writeln('Error when trying to stop container "' . $containerName . '": ' . $e->getMessage());
+                }
             }
         }
     }
