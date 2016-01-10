@@ -44,6 +44,12 @@ class DockerContainersCommand extends ContainerAwareCommand
         $containerManager = $docker->getContainerManager();
         $imageManager = $docker->getImageManager();
 
+        try {
+            $docker->getVersion();
+        } catch (\Exception $e) {
+            $stdout->writeln('Cannot access docker daemon: ' . $e->getMessage());
+        }
+
         $containers = [
             'percona-symblog' => [
                 'Image' => 'percona-symblog',
