@@ -1,11 +1,11 @@
 services:
     app.user.password_resetting:
         class: AppBundle\EventListener\PasswordResettingListener
-        arguments: [@router]
+        arguments: ["@router"]
         tags:
             - { name: kernel.event_subscriber }
     app.user.registration_init:
         class: AppBundle\EventListener\RegistrationInitListener
-        arguments: [ @router, @security.token_storage ]
+        arguments: [ "@router", "@security.token_storage" ]
         tags:
             - { name: kernel.event_subscriber }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Enquiry;
@@ -49,7 +50,17 @@ class PageController extends Controller
     public function contactAction()
     {
         $enquiry = new Enquiry();
-        $form = $this->createForm(new EnquiryType(), $enquiry);
+        $form = $this->createForm(
+            new EnquiryType(),
+            $enquiry,
+            [
+                'action' => $this->generateUrl('blogger_blog_contact'),
+                'method' => 'POST',
+                'attr' => [
+                    'class' => 'blogger',
+                ]
+            ]
+        );
 
         $request = $this->container->get('request_stack')->getCurrentRequest();
 

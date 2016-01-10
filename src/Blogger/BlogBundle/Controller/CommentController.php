@@ -22,7 +22,23 @@ class CommentController extends Controller
     {
         $comment = new Comment();
         $comment->setBlog($blog);
-        $form = $this->createForm(new CommentType(), $comment);
+
+        $form = $this->createForm(
+            new CommentType(),
+            $comment,
+            [
+                'action' => $this->generateUrl(
+                    'blogger_blog_comment_create',
+                    [
+                        'blog_id' => $blog->getId()
+                    ]
+                ),
+                'method' => 'POST',
+                'attr' => [
+                    'class' => 'blogger',
+                ]
+            ]
+        );
 
         return [
             'comment' => $comment,

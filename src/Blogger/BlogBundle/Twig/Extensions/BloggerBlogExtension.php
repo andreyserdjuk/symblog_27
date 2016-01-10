@@ -6,7 +6,7 @@ class BloggerBlogExtension extends \Twig_Extension
 {
     public function getFilters()
     {
-        return ['created_ago' => new \Twig_Filter_Method($this, 'createdAgo')];
+        return [ new \Twig_SimpleFilter('created_ago', [$this, 'createdAgo'])];
     }
 
     /**
