@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: andrej
- * Date: 11.07.15
- * Time: 22:59
- */
 
 namespace Blogger\BlogBundle\Tests\Form;
-
 
 use Blogger\BlogBundle\Entity\Comment;
 use Blogger\BlogBundle\Form\CommentType;

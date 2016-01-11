@@ -28,18 +28,26 @@ class PageControllerTest extends WebTestCase
 	{
 		$client = static::createClient();
 
-		$crawler = $client->request(Request::METHOD_GET, '/contact');
-// todo: consider login form at first
-		$this->assertEquals(1, $crawler->filter('h1:contains("Contact symblog")')->count());
+		// log in
+		$client->request(Request::METHOD_GET, '/contact');
+		$this->assertTrue($client->getResponse()->isRedirect());
+		$crawler = $client->followRedirect();
+		$form = $crawler->selectButton('Log in')->form();
+		$form['_username'] = 'fix';
+		$form['_password'] = '12345';
+		$client->submit($form);
+		$this->assertTrue($client->getResponse()->isRedirect());
+		$crawler = $client->followRedirect();
 
+		// add contact
+		//		$this->assertEquals(1, $crawler->filter('h1:contains("Contact symblog")')->count());
 		$form = $crawler->selectButton('Submit')->form();
-
 		$form['contact[name]']       = 'name';
 		$form['contact[email]']      = 'email@email.com';
 		$form['contact[subject]']    = 'Subject';
 		$form['contact[body]']       = 'The comment body must be at least 50 characters long as there is a validation constrain on the Enquiry entity';
 
-		$crawler = $client->submit($form);
+		$client->submit($form);
 
 		// Check email has been sent
 		if ($profile = $client->getProfile())
