@@ -17,3 +17,6 @@ parameters:
 
     # A secret key that's used to generate certain security-related tokens
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    blogger_blog.emails.contact_email: contact@email.com
+    blogger_blog.comments.latest_comment_limit: 10

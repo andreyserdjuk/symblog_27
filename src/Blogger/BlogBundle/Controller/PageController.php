@@ -106,7 +106,7 @@ class PageController extends Controller
         $tags = $blogRepo->getTags();
         $tagWeights = $blogRepo->getTagWeights($tags);
 
-        $commentLimit = $this->container->getParameter('blogger_blog.comments.latest_comment_limit');
+        $commentLimit = $this->getParameter('blogger_blog.comments.latest_comment_limit');
 
         $latestComments = $this->getDoctrine()
             ->getRepository('BloggerBlogBundle:Comment')
