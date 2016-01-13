@@ -29,7 +29,7 @@ class MatrixController extends Controller
     {
         $selectedGroup = $this->getDoctrine()->getRepository('AppBundle:Group')->find($groupId);
         if (!$selectedGroup) {
-            return new RedirectResponse($this->generateUrl('app_matrix_selectgroup'));
+            return new RedirectResponse($this->generateUrl('app_matrix_selectGroup'));
         }
 
         // this method affects $selectedGroup, don't move it
@@ -87,7 +87,7 @@ class MatrixController extends Controller
      */
     public function selectGroupAction(Request $request)
     {
-        $selectGroupForm = $this->createForm(new SelectGroupType());
+        $selectGroupForm = $this->createForm(SelectGroupType::class);
         $selectGroupForm->handleRequest($request);
         if ($selectGroupForm->isSubmitted() && $selectGroupForm->isValid()) {
             /** @var Group $selectedGroup */
