@@ -5,6 +5,9 @@ namespace AppBundle\Form;
 use AppBundle\Entity\Group;
 use AppBundle\Entity\StatusWorkflowDefinition;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,15 +18,15 @@ class GroupStatusWorkflowDefinitionsType extends AbstractType
         $builder
             ->add(
                 'status_workflow_definitions',
-                'collection',
+                CollectionType::class,
                 [
-                    'type' => new StatusWorkflowDefinitionType(),
+                    'entry_type' => StatusWorkflowDefinitionType::class,
                     'label' => false,
                 ]
             )
             ->add(
                 'submit',
-                'submit'
+                SubmitType::class
             )
         ;
 }

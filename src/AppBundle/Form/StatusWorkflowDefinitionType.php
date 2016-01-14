@@ -5,6 +5,8 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\StatusWorkflowDefinition;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -17,15 +19,15 @@ class StatusWorkflowDefinitionType extends AbstractType
             $builder
             ->add(
                 'currentStatus',
-                'hidden'
+                HiddenType::class
             )
             ->add(
                 'nextStatus',
-                'hidden'
+                HiddenType::class
             )
             ->add(
                 'allowed_to_switch',
-                'checkbox',
+                CheckboxType::class,
                 [
                     'label' => false,
                     'required' => false,
@@ -33,7 +35,7 @@ class StatusWorkflowDefinitionType extends AbstractType
             )
             ->add(
                 'isMandatoryComment',
-                'checkbox',
+                CheckboxType::class,
                 [
                     'label' => false,
                     'required' => false,

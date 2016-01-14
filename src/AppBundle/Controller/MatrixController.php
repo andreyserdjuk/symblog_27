@@ -36,7 +36,7 @@ class MatrixController extends Controller
         $guess = GroupStatusWorkflowDefinitionsType::buildMatrix($selectedGroup);
 
         $form = $this->createForm(
-            new GroupStatusWorkflowDefinitionsType(),
+            GroupStatusWorkflowDefinitionsType::class,
             $selectedGroup,
             [
                 'action' => $this
