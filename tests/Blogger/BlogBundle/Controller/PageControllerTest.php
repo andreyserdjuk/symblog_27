@@ -1,6 +1,6 @@
 <?php
 
-namespace Blogger\BlogBundle\Tests\Controller;
+namespace Tests\Blogger\BlogBundle\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

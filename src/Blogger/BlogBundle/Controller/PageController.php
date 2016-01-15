@@ -51,7 +51,7 @@ class PageController extends Controller
     {
         $enquiry = new Enquiry();
         $form = $this->createForm(
-            new EnquiryType(),
+            EnquiryType::class,
             $enquiry,
             [
                 'action' => $this->generateUrl('blogger_blog_contact'),
@@ -62,7 +62,7 @@ class PageController extends Controller
             ]
         );
 
-        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $request = $this->get('request_stack')->getCurrentRequest();
 
         if ($request->getMethod() == Request::METHOD_POST) {
 
@@ -72,7 +72,7 @@ class PageController extends Controller
                     ->setSubject('Contact enquiry from symblog')
                     ->setFrom('enquiries@symblog.co.uk')
                     ->setTo(
-                        $this->container->getParameter(
+                        $this->getParameter(
                             'blogger_blog.emails.contact_email'
                         )
                     )

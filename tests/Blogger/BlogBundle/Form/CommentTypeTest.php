@@ -1,6 +1,6 @@
 <?php
 
-namespace Blogger\BlogBundle\Tests\Form;
+namespace Tests\Blogger\BlogBundle\Form;
 
 use Blogger\BlogBundle\Entity\Comment;
 use Blogger\BlogBundle\Form\CommentType;
@@ -26,7 +26,7 @@ class CommentTypeTest extends WebTestCase
         $comment->setUser($formData['user']);
         $comment->setComment($formData['comment']);
 
-        $form = $container->get('form.factory')->create(new CommentType(), $comment);
+        $form = $container->get('form.factory')->create(CommentType::class, $comment);
         $form->submit($formData);
 
         $this->assertTrue($form->isSynchronized());

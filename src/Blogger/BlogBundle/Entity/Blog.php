@@ -161,7 +161,7 @@ class Blog
     }
 
     /**
-     * @return mixed
+     * @return ArrayCollection
      */
     public function getComments()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace Blogger\BlogBundle\Tests\Controller;
+namespace Tests\Blogger\BlogBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,8 +27,8 @@ class BlogControllerTest extends WebTestCase
 		$form = $crawler->selectButton('Submit')->form();
 
 		$crawler = $client->submit($form, array(
-			'blogger_blogbundle_comment[user]'          => 'name',
-			'blogger_blogbundle_comment[comment]'       => 'comment',
+			'comment[user]'          => 'name',
+			'comment[comment]'       => 'comment',
 		));
 
 		// Need to follow redirect

@@ -1,6 +1,6 @@
 <?php
 
-namespace Blogger\BlogBundle\Tests\Entity\Repository;
+namespace Tests\Blogger\BlogBundle\Entity\Repository;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

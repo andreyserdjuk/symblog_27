@@ -9,6 +9,7 @@ use Blogger\BlogBundle\Entity\Comment;
 use Blogger\BlogBundle\Form\CommentType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class CommentController extends Controller
 {
@@ -24,7 +25,7 @@ class CommentController extends Controller
         $comment->setBlog($blog);
 
         $form = $this->createForm(
-            new CommentType(),
+            CommentType::class,
             $comment,
             [
                 'action' => $this->generateUrl(
@@ -54,16 +55,13 @@ class CommentController extends Controller
      * )
      * @ParamConverter("blog", class="BloggerBlogBundle:Blog", options={"mapping": {"blog_id": "id"}})
      * @Method({"POST"})
-     * @Template()
      */
-    public function createAction(Blog $blog)
+    public function createAction(Request $request, Blog $blog)
     {
         $comment = new Comment();
         $comment->setBlog($blog);
 
-        $request = $this->container->get('request');
-
-        $form = $this->createForm(new CommentType(), $comment);
+        $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -71,21 +69,21 @@ class CommentController extends Controller
             $em->persist($comment);
             $em->flush();
 
-            return $this->redirect(
-                $this->generateUrl(
-                    'blogger_blog_show',
-                    [
-                        'id'   => $comment->getBlog()->getId(),
-                        'slug' => $comment->getBlog()->getSlug() . '#comment' . $comment->getId(),
-                    ]
-                )
-                . '#comment-' . $comment->getId()
-            );
+            $slug = '#comment-' . $comment->getId();
+        } else {
+            $comments = $blog->getComments();
+            $slug = $comments->isEmpty()? '' : '#comment' . $comments->first()->getId();
         }
 
-        return [
-            'comment' => $comment,
-            'form'    => $form->createView(),
-        ];
+        return $this->redirect(
+            $this->generateUrl(
+                'blogger_blog_show',
+                [
+                    'id'   => $comment->getBlog()->getId(),
+                    'slug' => $comment->getBlog()->getSlug(),
+                ]
+            )
+            . $slug
+        );
     }
 }
