@@ -42,10 +42,10 @@ class PageControllerTest extends WebTestCase
 		// add contact
 		//		$this->assertEquals(1, $crawler->filter('h1:contains("Contact symblog")')->count());
 		$form = $crawler->selectButton('Submit')->form();
-		$form['contact[name]']       = 'name';
-		$form['contact[email]']      = 'email@email.com';
-		$form['contact[subject]']    = 'Subject';
-		$form['contact[body]']       = 'The comment body must be at least 50 characters long as there is a validation constrain on the Enquiry entity';
+		$form['enquiry[name]']       = 'name';
+		$form['enquiry[email]']      = 'email@email.com';
+		$form['enquiry[subject]']    = 'Subject';
+		$form['enquiry[body]']       = 'The comment body must be at least 50 characters long as there is a validation constrain on the Enquiry entity';
 
 		$client->submit($form);
 
