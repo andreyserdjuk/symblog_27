@@ -47,7 +47,7 @@ class PageController extends Controller
      * @Method({"GET", "POST"})
      * @Template()
      */
-    public function contactAction()
+    public function contactAction(Request $request)
     {
         $enquiry = new Enquiry();
         $form = $this->createForm(
@@ -62,36 +62,32 @@ class PageController extends Controller
             ]
         );
 
-        $request = $this->get('request_stack')->getCurrentRequest();
+        $form->handleRequest($request);
 
-        if ($request->getMethod() == Request::METHOD_POST) {
-
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('Contact enquiry from symblog')
-                    ->setFrom('enquiries@symblog.co.uk')
-                    ->setTo(
-                        $this->getParameter(
-                            'blogger_blog.emails.contact_email'
-                        )
+        if ($form->isSubmitted() && $form->isValid()) {
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Contact enquiry from symblog')
+                ->setFrom('enquiries@symblog.co.uk')
+                ->setTo(
+                    $this->getParameter(
+                        'blogger_blog.emails.contact_email'
                     )
-                    ->setBody(
-                        $this->renderView(
-                            'BloggerBlogBundle:Page:contactEmail.txt.twig',
-                            array('enquiry' => $enquiry)
-                        )
-                    );
-
-                $this->get('mailer')->send($message);
-
-                $this->addFlash(
-                    'blogger-notice',
-                    'Your contact enquiry was successfully sent. Thank you!'
+                )
+                ->setBody(
+                    $this->renderView(
+                        'BloggerBlogBundle:Page:contactEmail.txt.twig',
+                        array('enquiry' => $enquiry)
+                    )
                 );
 
-                return $this->redirectToRoute('blogger_blog_contact');
-            }
+            $this->get('mailer')->send($message);
+
+            $this->addFlash(
+                'blogger-notice',
+                'Your contact enquiry was successfully sent. Thank you!'
+            );
+
+            return $this->redirectToRoute('blogger_blog_contact');
         }
 
         return ['form' => $form->createView()];
