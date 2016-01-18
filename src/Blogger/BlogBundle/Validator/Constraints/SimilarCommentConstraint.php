@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: andrej
- * Date: 12.07.15
- * Time: 0:54
- */
 
 namespace Blogger\BlogBundle\Validator\Constraints;
 

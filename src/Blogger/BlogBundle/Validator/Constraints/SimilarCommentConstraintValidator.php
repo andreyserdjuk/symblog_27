@@ -1,16 +1,8 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: andrej
- * Date: 12.07.15
- * Time: 0:59
- */
 
 namespace Blogger\BlogBundle\Validator\Constraints;
 
-
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
 use Symfony\Component\Validator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -30,7 +22,7 @@ class SimilarCommentConstraintValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint)
     {
-        $similarComment = $this->em->getRepository("BloggerBlogBundle:Comment")
+        $similarComment = $this->em->getRepository('BloggerBlogBundle:Comment')
             ->getSimilarByComment($value);
 
         if ($similarComment) {

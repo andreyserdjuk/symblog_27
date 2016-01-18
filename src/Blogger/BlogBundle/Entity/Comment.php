@@ -2,11 +2,7 @@
 
 namespace Blogger\BlogBundle\Entity;
 
-use Blogger\BlogBundle\Validator\Constraints\SimilarCommentConstraint;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Mapping\ClassMetadata;
-use Symfony\Component\Validator\Constraints\NotBlank;
-
 
 /**
  * @ORM\Entity(repositoryClass="Blogger\BlogBundle\Entity\Repository\CommentRepository")
@@ -215,18 +211,5 @@ class Comment
     public function getBlog()
     {
         return $this->blog;
-    }
-
-    public static function loadValidatorMetadata(ClassMetadata $metadata)
-    {
-        $metadata->addPropertyConstraint('user', new NotBlank(array(
-            'message' => 'You must enter your name'
-        )));
-
-        $metadata->addPropertyConstraint('comment', new NotBlank(array(
-            'message' => 'You must enter a comment'
-        )));
-
-        $metadata->addPropertyConstraint('comment', new SimilarCommentConstraint());
     }
 }
