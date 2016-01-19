@@ -27,9 +27,11 @@ class PageControllerTest extends WebTestCase
 	public function testContact()
 	{
 		$client = static::createClient();
+		$client->enableProfiler();
 
 		// log in
 		$client->request(Request::METHOD_GET, '/contact');
+
 		$this->assertTrue($client->getResponse()->isRedirect());
 		$crawler = $client->followRedirect();
 		$form = $crawler->selectButton('Log in')->form();
@@ -59,7 +61,12 @@ class PageControllerTest extends WebTestCase
 
 			// Get the first message
 			$messages = $swiftMailerProfiler->getMessages();
+			/** @var \Swift_Message $message */
 			$message  = array_shift($messages);
+
+			$this->assertInstanceOf('Swift_Message', $message);
+			$this->assertEquals('Contact enquiry from symblog', $message->getSubject());
+			$this->assertEquals('enquiries@symblog.co.uk', key($message->getFrom()));
 
 			$symblogEmail = $client->getContainer()->getParameter('blogger_blog.emails.contact_email');
 			// Check message is being sent to correct address
