@@ -24,6 +24,6 @@ class BloggerBlogExtensionTest extends \PHPUnit_Framework_TestCase
 
 	protected function getDateTime($delta)
 	{
-		return new \DateTime(date("Y-m-d H:i:s", time()+$delta));
+		return new \DateTime(date("Y-m-d H:i:s", time() + $delta));
 	}
 }
