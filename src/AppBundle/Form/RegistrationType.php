@@ -4,6 +4,7 @@ namespace AppBundle\Form;
 
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -18,7 +19,7 @@ class RegistrationType extends AbstractType
     {
         $builder->add(
             'passportCode',
-            'text',
+            TextType::class,
             [
                 // 'position' is handled by https://github.com/egeloen/IvoryOrderedFormBundle
                 'position' => 'first',
