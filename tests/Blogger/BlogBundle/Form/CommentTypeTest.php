@@ -8,10 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class CommentTypeTest extends WebTestCase
 {
-    public function createSimilarComment()
-    {
-    }
-
     public function testSubmitValidData()
     {
         $client = WebTestCase::createClient();
