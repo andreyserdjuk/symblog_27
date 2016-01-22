@@ -1,4 +1,5 @@
 <?php
+
 namespace Blogger\BlogBundle\Controller;
 
 use Blogger\BlogBundle\Entity\Blog;
