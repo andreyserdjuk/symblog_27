@@ -30,8 +30,14 @@
                         <li><a href="{{ path("blogger_blog_about") }}">About</a></li>
                         <li><a href="{{ path("blogger_blog_contact") }}">Contact</a></li>
                         <li><a href="{{ path("app_matrix_selectgroup") }}">Matrix</a></li>
-                        {% if app.user is null  %}
-                        <li><a href="{{ path("fos_user_registration_register") }}">Register</a></li>
+                        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                            <a href="{{ path('fos_user_security_logout') }}">
+                                {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                            </a>
+                        {% else %}
+                            <li><a href="{{ path("fos_user_registration_register") }}">Register</a></li>
+                            <li><a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a></li>
                         {% endif %}
                     </ul>
                 </nav>

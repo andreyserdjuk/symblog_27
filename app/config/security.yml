@@ -15,22 +15,23 @@ security:
     firewalls:
         main:
             pattern: ^/
-            http_basic: ~
             form_login:
                 provider: fos_userbundle
-#                csrf_provider: security.csrf.token_manager
+                csrf_token_generator: security.csrf.token_manager
                 check_path: /fos/login_check
                 login_path: /fos/login
-            logout:       true
             anonymous:    true
+            logout:
+                path: fos_user_security_logout
+#                target: index
         dev:
             pattern: ^/(_(profiler|wdt|error)|css|images|js)/
             security: false
 
     access_control:
-        - { path: ^/admin, roles: ROLE_ADMIN }
-        - { path: ^/contact, roles: ROLE_USER }
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/admin/, role: ROLE_ADMIN }
+        - { path: ^/admin,      role: ROLE_ADMIN }
+        - { path: ^/contact,    role: ROLE_USER }
+        - { path: ^/login$,     role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register,   role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/resetting,  role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/,     role: ROLE_ADMIN }
