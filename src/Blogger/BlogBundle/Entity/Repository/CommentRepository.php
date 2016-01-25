@@ -19,7 +19,11 @@ class CommentRepository extends EntityRepository
                 ->setParameter('approved', $approved);
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb
+            ->getQuery()
+            ->useResultCache(true)
+            ->getResult()
+        ;
     }
 
 
@@ -33,7 +37,11 @@ class CommentRepository extends EntityRepository
             $qb->setMaxResults($limit);
         }
 
-        return $qb->getQuery()->getResult();
+        return $qb
+            ->getQuery()
+            ->useResultCache(true)
+            ->getResult()
+        ;
     }
 
     public function getSimilarByComment($value)
@@ -43,6 +51,7 @@ class CommentRepository extends EntityRepository
             ->where('c.comment LIKE :comment')
             ->setParameter('comment', '%' . $value . '%')
             ->getQuery()
+            ->useResultCache(true)
             ->getResult();
     }
 }

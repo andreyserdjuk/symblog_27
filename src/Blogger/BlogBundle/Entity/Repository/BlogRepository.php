@@ -14,6 +14,7 @@ class BlogRepository extends EntityRepository
             ->from('BloggerBlogBundle:Blog', 'b')
             ->orderBy('b.created', 'DESC')
             ->getQuery()
+            ->useResultCache(true)
             ->getResult();
     }
 
@@ -30,6 +31,7 @@ class BlogRepository extends EntityRepository
             ->addOrderBy('b.created', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
+            ->useResultCache(true)
             ->getResult();
     }
 
@@ -39,6 +41,7 @@ class BlogRepository extends EntityRepository
         $blogTags = $this->createQueryBuilder('b')
             ->select('b.tags')
             ->getQuery()
+            ->useResultCache(true)
             ->getResult();
 
         $tags = array();
