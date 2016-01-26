@@ -1,9 +1,6 @@
 {% extends 'BloggerBlogBundle::layout.html.twig' %}
 
 {% block body %}
-    <div>
-
-    </div>
 
     {% if app.request.hasPreviousSession %}
         {% for type, messages in app.session.flashbag.all() %}
