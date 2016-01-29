@@ -9,7 +9,7 @@ services:
         arguments: [ "@router", "@security.token_storage" ]
         tags:
             - { name: kernel.event_subscriber }
-    app.user.implicit_login:s
+    app.user.interactive_login:
         class: AppBundle\EventListener\LoginEventListener
         arguments: [ "@session", "@security.token_storage" ]
         tags:
