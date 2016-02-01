@@ -74,6 +74,6 @@ class PageControllerTest extends WebTestCase
 
 		$crawler = $client->followRedirect();
 
-		$this->assertEquals(1, $crawler->filter('.blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count());
+		$this->assertEquals(1, $crawler->filter('.flash-blogger-notice:contains("Your contact enquiry was successfully sent. Thank you!")')->count());
 	}
 }
