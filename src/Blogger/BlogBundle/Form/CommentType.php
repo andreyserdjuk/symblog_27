@@ -4,6 +4,7 @@ namespace Blogger\BlogBundle\Form;
 
 use Blogger\BlogBundle\Validator\Constraints\SimilarCommentConstraint;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -31,7 +32,7 @@ class CommentType extends AbstractType
             )
             ->add(
                 'comment',
-                TextType::class,
+                TextareaType::class,
                 [
                     'constraints' => [
                         new NotBlank([
