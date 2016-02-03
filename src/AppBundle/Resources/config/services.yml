@@ -4,11 +4,13 @@ services:
         arguments: ["@router"]
         tags:
             - { name: kernel.event_subscriber }
+
     app.user.registration_init:
         class: AppBundle\EventListener\RegistrationInitListener
         arguments: [ "@router", "@security.token_storage" ]
         tags:
             - { name: kernel.event_subscriber }
+
     app.user.interactive_login:
         class: AppBundle\EventListener\LoginEventListener
         arguments: [ "@session", "@security.token_storage" ]

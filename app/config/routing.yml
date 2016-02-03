@@ -1,6 +1,5 @@
 blogger_blog:
     resource: "@BloggerBlogBundle/Controller/"
-    type: annotation
 
 app_bundle:
     resource: "@AppBundle/Controller/"
