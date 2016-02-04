@@ -59,7 +59,7 @@ class BlogControllerTest extends WebTestCase
 	public static function tearDownAfterClass()
 	{
 		$client = static::createClient();
-		$em = $client->getContainer()->get('doctrine.orm.entity_manager');
+		$em = $client->getContainer()->get('doctrine')->getManager();
 		$comment = $em->getRepository('BloggerBlogBundle:Comment')->findOneBy(['user' => 'name', 'comment' => 'comment']);
 		if ($comment) {
 			$em->remove($comment);
