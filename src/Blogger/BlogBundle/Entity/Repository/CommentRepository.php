@@ -39,7 +39,7 @@ class CommentRepository extends EntityRepository
 
         return $qb
             ->getQuery()
-            ->useResultCache(true)
+            ->useResultCache(false, 3600, 'latest_comments')
             ->getResult()
         ;
     }

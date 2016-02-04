@@ -66,9 +66,10 @@ class CommentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
             $em->flush();
+            $em->getConfiguration()->getResultCacheImpl()->delete('latest_comments');
 
             $slug = '#comment-' . $comment->getId();
         } else {
