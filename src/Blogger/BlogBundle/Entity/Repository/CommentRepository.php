@@ -21,7 +21,7 @@ class CommentRepository extends EntityRepository
 
         return $qb
             ->getQuery()
-            ->useResultCache(true)
+            ->useResultCache(true, 3600)
             ->getResult()
         ;
     }
@@ -51,7 +51,7 @@ class CommentRepository extends EntityRepository
             ->where('c.comment LIKE :comment')
             ->setParameter('comment', '%' . $value . '%')
             ->getQuery()
-            ->useResultCache(true)
+            ->useResultCache(true, 3600)
             ->getResult();
     }
 }
