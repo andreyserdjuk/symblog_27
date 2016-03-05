@@ -15,6 +15,9 @@ class SimilarCommentConstraint extends Constraint
 {
     public $message = 'Similar comment is already exists.';
 
+    /**
+     * For current case it returns alias of service got from corresponding validator
+     */
     public function validatedBy()
     {
         return 'commentUnique';
