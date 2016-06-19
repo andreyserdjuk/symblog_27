@@ -3,6 +3,12 @@ security:
         fos_userbundle:
             id: fos_user.user_provider.username
 
+        # approach to load user if current system used as secondary for another legacy
+        legacy_db_provider:
+            entity:
+                class: AppBundle:FOSUserChild
+                property: username
+
     encoders:
         FOS\UserBundle\Model\UserInterface:
             algorithm: bcrypt
@@ -15,6 +21,12 @@ security:
     firewalls:
         main:
             pattern: ^/
+
+            # approach to load user if current system used as secondary for another legacy
+            provider: legacy_db_provider
+            simple_preauth:
+                authenticator: app.security.legacy_authenticator
+
             form_login:
                 provider: fos_userbundle
                 csrf_token_generator: security.csrf.token_manager

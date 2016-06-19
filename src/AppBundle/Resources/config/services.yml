@@ -16,3 +16,10 @@ services:
         arguments: [ "@session", "@security.token_storage" ]
         tags:
             - { name: kernel.event_subscriber }
+
+    # approach to load user if current system used as secondary for another legacy
+    app.security.legacy_authenticator:
+        class: AppBundle\Security\LegacyAuthenticator
+        arguments:
+            - "@session.storage.native"
+        public: false
