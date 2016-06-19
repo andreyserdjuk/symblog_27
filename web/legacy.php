@@ -6,6 +6,10 @@ session_start();
 
 $_SESSION['userId'] = 123;
 $_SESSION['username'] = 'fix';
-$_SESSION['roles'] = array(1,2,3);
+$_SESSION['roles'] = [
+    'old_role_admin',
+    'old_role_user',
+    'old_role_super_admin',
+];
 
 var_dump($_SESSION);

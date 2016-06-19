@@ -15,6 +15,12 @@ class LegacyAuthenticator implements SimplePreAuthenticatorInterface
 {
     protected $sessoinStorage;
 
+    protected static $rolesMap = [
+        'old_role_admin' => 'ROLE_ADMIN',
+        'old_role_user' => 'ROLE_USER',
+        'old_role_super_admin' => 'ROLE_SUPER_ADMIN',
+    ];
+
     public function __construct(NativeSessionStorage $sessionStorage)
     {
         $this->sessoinStorage = $sessionStorage;
@@ -30,7 +36,11 @@ class LegacyAuthenticator implements SimplePreAuthenticatorInterface
             $userName = $_SESSION['username'];
             $roles = (array) $_SESSION['roles'];
             $roles = array_map(function ($element) {
-                    return (string) $element;
+                    if (!isset(self::$rolesMap[$element])) {
+                        throw new \RuntimeException(sprintf('Legacy role "%s" cannot be mapped to new system Role', $element));
+                    }
+
+                    return (string) self::$rolesMap[$element];
                 },
                 $roles
             );
