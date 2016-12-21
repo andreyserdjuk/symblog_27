@@ -34,6 +34,9 @@ class CommentType extends AbstractType
                 'comment',
                 TextareaType::class,
                 [
+                    'attr' => [
+                        'class' => 'tinymce',
+                    ],
                     'constraints' => [
                         new NotBlank([
                             'message' => 'You must enter a comment',

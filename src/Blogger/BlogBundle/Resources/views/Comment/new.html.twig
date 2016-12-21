@@ -1,5 +1,7 @@
 {# src/Blogger/BlogBundle/Resources/views/Comment/form.html.twig #}
-
+{% block javascripts %}
+{{ tinymce_init() }}
+{% endblock %}
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <p>
